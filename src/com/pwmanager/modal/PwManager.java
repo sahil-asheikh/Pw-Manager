@@ -4,9 +4,9 @@ public class PwManager {
 	private int id;
 	private String user_username;
 	private String user_password;
-	private String password;
 	private int key;
 	private String username;
+	private String password;
 	private String user_email;
 	private String app_name;
 	private String url;
