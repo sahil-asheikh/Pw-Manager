@@ -1,4 +1,5 @@
 package com.pwmanager.mains;
+import java.util.List;
 import java.util.Scanner;
 
 import com.pwmanager.dao.PwManager_dao;
@@ -26,12 +27,12 @@ public class PwManager_main {
 		if (valid) {
 			System.out.println("Login Success");
 			for (; ; ) {
-				System.out.println("------------------------------------");
+//				System.out.println("------------------------------------");
+				System.out.println();
 				System.out.println("----------------MENU----------------");
 				System.out.println("1. create new password");
-				System.out.println("2. find all sites and passwords");
-				System.out.println("3. find a password for a site or app");
-				System.out.println("4. logout");
+				System.out.println("2. show saved passwords");
+				System.out.println("3. logout");
 				System.out.println("------------------------------------");
 
 				int user_input = scan.nextInt();
@@ -82,17 +83,25 @@ public class PwManager_main {
 					// retrieve the whole table
 					try{
 						
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else if (user_input == 3) {
-					// take input from user and print the password of particular site/app
-					try{
+						List<PwManager> passwords = PwManager_dao.retrievePwTable();
+
+						System.out.println("");
+						
+						System.out.println("+-----------------------------------------------------------------------------------------------------------------------+");		// for padding
+						System.out.printf("|%-10s|%-26s|%-20s|%-25s|%-30s|%3s|\n", "App Name", "Username", "Password", "User Email", "App Url", "Key");
+						System.out.println("+----------+--------------------------+--------------------+-------------------------+------------------------------+---+");		// for padding
+						for (PwManager pass: passwords) {							
+							System.out.printf("|%-10s|%-26s|%-20s|%-25s|%-30s|%03d|\n", pass.getApp_name(), pass.getUsername(), pass.getPassword(), pass.getUser_email(), pass.getUrl(), pass.getKey());
+							System.out.println("+----------+--------------------------+--------------------+-------------------------+------------------------------+---+");		// for padding
+						}
+						System.out.println("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x");		// for padding
+						
+						System.out.println("All data retrieved");
 						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				} else if (user_input == 4) {
+				} else if (user_input == 3) {
 					break;				// break the loop
 				} else {
 					System.out.println("Invalid Input");

@@ -9,3 +9,7 @@
 
 ## Built With
 * This application is developed using Java, JDBC, Oracle.
+
+##tables has to created
+* create table pwmanager_001 (id number(3), password varchar2(20), key number(3), username varchar2(20), user_email varchar2(40), app_name varchar2(20), url varchar2(30));
+* create table userlogin_001 (id number(3), username varchar2(40), password varchar2(20), email varchar2(40));
