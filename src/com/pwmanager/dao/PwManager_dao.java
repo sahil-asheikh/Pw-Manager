@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pwmanager.mains.PwManager_main;
 import com.pwmanager.modal.PwManager;
 
 public class PwManager_dao {
@@ -136,6 +137,7 @@ public class PwManager_dao {
 				password.setUser_email(rs.getString(5));
 				password.setUrl(rs.getString(7));
 				password.setKey(rs.getInt(3));
+				password.setId(rs.getInt(1));
 				
 				passwords.add(password);
 				
@@ -146,5 +148,20 @@ public class PwManager_dao {
 		return passwords;
 	}
 	
+//	method to delete password
+	public static int deletePassword (int delete_key) {
+		int i = 0;
+		
+		try {
+			Connection con = PwManager_dao.getConnection();
+			PreparedStatement ps = con.prepareStatement("delete pwmanager_001 where id = ?");
+			ps.setInt(1, delete_key);
+			i = ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return i;
+	}
 	
 }

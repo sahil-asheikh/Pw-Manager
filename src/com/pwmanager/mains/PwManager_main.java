@@ -32,7 +32,8 @@ public class PwManager_main {
 				System.out.println("----------------MENU----------------");
 				System.out.println("1. create new password");
 				System.out.println("2. show saved passwords");
-				System.out.println("3. logout");
+				System.out.println("3. delete password");
+				System.out.println("4. logout");
 				System.out.println("------------------------------------");
 
 				int user_input = scan.nextInt();
@@ -87,14 +88,14 @@ public class PwManager_main {
 
 						System.out.println("");
 						
-						System.out.println("+-----------------------------------------------------------------------------------------------------------------------+");		// for padding
-						System.out.printf("|%-10s|%-26s|%-20s|%-25s|%-30s|%3s|\n", "App Name", "Username", "Password", "User Email", "App Url", "Key");
-						System.out.println("+----------+--------------------------+--------------------+-------------------------+------------------------------+---+");		// for padding
+						System.out.println("+----------------------------------------------------------------------------------------------------------------------------------+");		// for padding
+						System.out.printf("|%-10s|%-26s|%-20s|%-25s|%-30s|%3s|%10s|\n", "App Name", "Username", "Password", "User Email", "App Url", "Key", "Delete Key");
+						System.out.println("+----------+--------------------------+--------------------+-------------------------+------------------------------+---+----------+");		// for padding
 						for (PwManager pass: passwords) {							
-							System.out.printf("|%-10s|%-26s|%-20s|%-25s|%-30s|%03d|\n", pass.getApp_name(), pass.getUsername(), pass.getPassword(), pass.getUser_email(), pass.getUrl(), pass.getKey());
-							System.out.println("+----------+--------------------------+--------------------+-------------------------+------------------------------+---+");		// for padding
+							System.out.printf("|%-10s|%-26s|%-20s|%-25s|%-30s|%03d|%10d|\n", pass.getApp_name(), pass.getUsername(), pass.getPassword(), pass.getUser_email(), pass.getUrl(), pass.getKey(), pass.getId());
+							System.out.println("+----------+--------------------------+--------------------+-------------------------+------------------------------+---+----------+");		// for padding
 						}
-						System.out.println("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x");		// for padding
+						System.out.println("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x");		// for padding
 						
 						System.out.println("All data retrieved");
 						
@@ -102,6 +103,21 @@ public class PwManager_main {
 						e.printStackTrace();
 					}
 				} else if (user_input == 3) {
+					System.out.println("Enter Delete Key");
+					int delete_key = scan.nextInt();
+					
+					try {
+						int delete_status = PwManager_dao.deletePassword(delete_key);
+						if (delete_status == 1) {
+							System.out.println("Password Deleted");
+						} else {
+							System.out.println("Password didn't deleted");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+				} else if (user_input == 4) {
 					break;				// break the loop
 				} else {
 					System.out.println("Invalid Input");
