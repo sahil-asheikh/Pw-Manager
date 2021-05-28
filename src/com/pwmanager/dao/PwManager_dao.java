@@ -8,16 +8,40 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pwmanager.mains.PwManager_main;
-import com.pwmanager.modal.PwManager;
+import com.pwmanager.models.PwManager;
 
 public class PwManager_dao {
+	
+	/*
+
+	Database name: passwordManager
+	Table name: users
+				passwords
+
+	CREATE TABLE passwords
+	(id INT(3) not NULL, 
+	password VARCHAR(20), 
+	keyZ INT(3), 
+	username VARCHAR(26), 
+	user_email VARCHAR(30), 
+	app_name VARCHAR(10), 
+	url VARCHAR(30), 
+	PRIMARY KEY ( id ));
+	
+	create table users
+    (username varchar(20),
+    password varchar(20),
+    email varchar(50));
+	
+	*/
 	
 	public static Connection getConnection(){
 		Connection connection = null;
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "admin");
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/passwordManager", "root", "admin");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -29,7 +53,7 @@ public class PwManager_dao {
 		boolean valid = false;
 		try {
 			Connection connection = PwManager_dao.getConnection();
-			PreparedStatement ps = connection.prepareStatement("select * from userlogin_001 where username = ? and password = ?");
+			PreparedStatement ps = connection.prepareStatement("select * from users where username = ? and password = ?");
 			ps.setString(1, pwmanager.getUser_username());
 			ps.setString(2, pwmanager.getUser_password());
 			ResultSet rs = ps.executeQuery();
@@ -47,7 +71,7 @@ public class PwManager_dao {
 		int id = 0;
 		try {
 			Connection con = PwManager_dao.getConnection();
-			PreparedStatement ps = con.prepareStatement("select max(id) from pwmanager_001");
+			PreparedStatement ps = con.prepareStatement("select max(id) from passwords");
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				id = rs.getInt(1);
@@ -101,7 +125,7 @@ public class PwManager_dao {
 			int max_id = PwManager_dao.max_id();
 			String enc_pass = PwManager_dao.encPass(pwmanager.getPassword(), pwmanager.getKey());
 			Connection con = PwManager_dao.getConnection();
-			PreparedStatement ps = con.prepareStatement("insert into pwmanager_001 values(?,?,?,?,?,?,?)");
+			PreparedStatement ps = con.prepareStatement("insert into passwords values(?,?,?,?,?,?,?)");
 			ps.setInt(1, max_id);
 			ps.setString(2, enc_pass);
 			ps.setInt(3, pwmanager.getKey());
@@ -123,7 +147,7 @@ public class PwManager_dao {
 		List<PwManager> passwords = new ArrayList<PwManager>();
 		try {
 			Connection con = PwManager_dao.getConnection();
-			PreparedStatement ps = con.prepareStatement("select * from pwmanager_001");
+			PreparedStatement ps = con.prepareStatement("select * from passwords");
 			ResultSet rs = ps.executeQuery();
 			String pass = null;
 			while (rs.next()) {
@@ -154,7 +178,7 @@ public class PwManager_dao {
 		
 		try {
 			Connection con = PwManager_dao.getConnection();
-			PreparedStatement ps = con.prepareStatement("delete pwmanager_001 where id = ?");
+			PreparedStatement ps = con.prepareStatement("delete passwords where id = ?");
 			ps.setInt(1, delete_key);
 			i = ps.executeUpdate();
 		} catch (Exception e) {

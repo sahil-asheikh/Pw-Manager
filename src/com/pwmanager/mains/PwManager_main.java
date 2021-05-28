@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.pwmanager.dao.PwManager_dao;
-import com.pwmanager.modal.PwManager;
+import com.pwmanager.models.PwManager;
 
 
 public class PwManager_main {
@@ -13,6 +13,11 @@ public class PwManager_main {
 		Scanner scan = new Scanner(System.in);
 		PwManager manager = new PwManager();
 
+		/*
+		 * default username = default_username
+		 * default password = default_password
+		 */
+		
 		System.out.println("Username");
 		String uname = scan.nextLine();
 
@@ -27,7 +32,6 @@ public class PwManager_main {
 		if (valid) {
 			System.out.println("Login Success");
 			for (; ; ) {
-//				System.out.println("------------------------------------");
 				System.out.println();
 				System.out.println("----------------MENU----------------");
 				System.out.println("1. create new password");
@@ -48,7 +52,7 @@ public class PwManager_main {
 						
 						System.out.println("Enter Key");
 						int key = scan.nextInt();
-						String temp1 = scan.nextLine();					// to skip this line
+						String temp1= scan.nextLine();					// to skip this line
 						
 						System.out.println("Enter Username");
 						String username = scan.nextLine();
@@ -88,12 +92,12 @@ public class PwManager_main {
 
 						System.out.println("");
 						
-						System.out.println("+----------------------------------------------------------------------------------------------------------------------------------+");		// for padding
-						System.out.printf("|%-10s|%-26s|%-20s|%-25s|%-30s|%3s|%10s|\n", "App Name", "Username", "Password", "User Email", "App Url", "Key", "Delete Key");
-						System.out.println("+----------+--------------------------+--------------------+-------------------------+------------------------------+---+----------+");		// for padding
+						System.out.println("+---------------------------------------------------------------------------------------------------------------------------------------+");		// for padding
+						System.out.printf("|%-10s|%-26s|%-20s|%-30s|%-30s|%3s|%10s|\n", "App Name", "Username", "Password", "User Email", "App Url", "Key", "Delete Key");
+						System.out.println("+----------+--------------------------+--------------------+------------------------------+------------------------------+---+----------+");		// for padding
 						for (PwManager pass: passwords) {							
-							System.out.printf("|%-10s|%-26s|%-20s|%-25s|%-30s|%03d|%10d|\n", pass.getApp_name(), pass.getUsername(), pass.getPassword(), pass.getUser_email(), pass.getUrl(), pass.getKey(), pass.getId());
-							System.out.println("+----------+--------------------------+--------------------+-------------------------+------------------------------+---+----------+");		// for padding
+							System.out.printf("|%-10s|%-26s|%-20s|%-30s|%-30s|%03d|%10d|\n", pass.getApp_name(), pass.getUsername(), pass.getPassword(), pass.getUser_email(), pass.getUrl(), pass.getKey(), pass.getId());
+							System.out.println("+----------+--------------------------+--------------------+------------------------------+------------------------------+---+----------+");		// for padding
 						}
 						System.out.println("x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x");		// for padding
 						
@@ -128,6 +132,8 @@ public class PwManager_main {
 		} else {
 			System.out.println("login failed");
 		}
+		
+		scan.close();
 		
 	}
 
