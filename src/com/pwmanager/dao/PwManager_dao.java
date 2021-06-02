@@ -178,7 +178,7 @@ public class PwManager_dao {
 		
 		try {
 			Connection con = PwManager_dao.getConnection();
-			PreparedStatement ps = con.prepareStatement("delete passwords where id = ?");
+			PreparedStatement ps = con.prepareStatement("delete from passwords where id = ?");
 			ps.setInt(1, delete_key);
 			i = ps.executeUpdate();
 		} catch (Exception e) {
@@ -186,6 +186,25 @@ public class PwManager_dao {
 		}
 		
 		return i;
+	}
+	
+	
+//	method to insert user into an database
+	public static int insertUser(){
+		int status = 0;
+		try {
+			Connection con = PwManager_dao.getConnection();
+			PreparedStatement ps = con.prepareStatement("insert into users values(?,?,?)");
+			ps.setString(1, "default_username");
+			ps.setString(2, "default_password");
+			ps.setString(3, "default@mail.com");
+			
+			status = ps.executeUpdate();
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return status;
 	}
 	
 }

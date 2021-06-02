@@ -91,8 +91,8 @@ public class DatabaseTable_DAO {
 		return exist;
 	}
 	
-//	method to create table
-	public static int createtable (String dbname, String table_name) {
+//	method to create password table
+	public static int createPasswordTable (String dbname, String table_name) {
 		int i = 1;
 		if (dbname != null && table_name != null) {
 			try {
@@ -108,6 +108,27 @@ public class DatabaseTable_DAO {
 						" app_name VARCHAR(10), " +
 						" url VARCHAR(30), " +
 						" PRIMARY KEY ( id ))";
+				i = stmt.executeUpdate(query);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return i;
+	}
+	
+//	method to create user table
+	public static int createUserTable (String dbname, String table_name) {
+		int i = 1;
+		if (dbname != null && table_name != null) {
+			try {
+				Connection con = DatabaseTable_DAO.getConnection(dbname);
+				Statement stmt = con.createStatement();
+
+				String query = "CREATE TABLE users"
+						+ "(username VARCHAR(20),"
+						+ "password VARCHAR(20),"
+						+ "email VARCHAR(50))";
+				
 				i = stmt.executeUpdate(query);
 			} catch (Exception e) {
 				e.printStackTrace();
