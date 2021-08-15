@@ -7,10 +7,9 @@
 ## Database and Tables
 * Database: CREATE DATABASE passwordManager;
 
-* Table: 	create table users (id int not null auto_increment, username varchar(20) not null, password varchar(20) not null, email varchar(50), primary key (id));
+* Table: 	create table users(id int not null auto_increment, username varchar(20) not null, password varchar(20) not null, email varchar(50), primary key (id));
     
-* Table: 	CREATE TABLE passwords (id INT(3) not NULL, password VARCHAR(20), 
-	keyZ INT(3), username VARCHAR(26), user_email VARCHAR(30), app_name VARCHAR(10), url VARCHAR(30), PRIMARY KEY ( id ));
+* Table: 	CREATE TABLE passwords(id int not null, userid int not null, password varchar(20), keyt int(3), username varchar(26), user_email varchar(30), app_name varchar(10), url varchar(30), primary key ( id ));
 
 ## Built With
 * This application is developed using Java, JDBC, MySql.
