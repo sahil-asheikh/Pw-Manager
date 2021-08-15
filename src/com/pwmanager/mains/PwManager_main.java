@@ -27,9 +27,10 @@ public class PwManager_main {
 		manager.setUser_username(uname);
 		manager.setUser_password(pword);
 		
-		boolean valid = PwManager_dao.validate(manager);
+		int valid = PwManager_dao.validate(manager);
 		
-		if (valid) {
+		if (valid != 0) {
+			manager.setUserid(valid);
 			System.out.println("Login Success");
 			while (true) {
 				System.out.println();
@@ -88,7 +89,7 @@ public class PwManager_main {
 					// retrieve the whole table
 					try{
 						
-						List<PwManager> passwords = PwManager_dao.retrievePwTable();
+						List<PwManager> passwords = PwManager_dao.retrievePwTable(valid);
 
 						System.out.println("");
 						

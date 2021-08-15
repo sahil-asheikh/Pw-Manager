@@ -2,6 +2,7 @@ package com.pwmanager.models;
 
 public class PwManager {
 	private int id;
+	private int userid;
 	private String user_username;
 	private String user_password;
 	private int key;
@@ -11,11 +12,18 @@ public class PwManager {
 	private String app_name;
 	private String url;
 
+	
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public int getUserid() {
+		return userid;
+	}
+	public void setUserid(int userid) {
+		this.userid = userid;
 	}
 	public String getUser_username() {
 		return user_username;

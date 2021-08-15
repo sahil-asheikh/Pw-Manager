@@ -12,29 +12,6 @@ import com.pwmanager.models.PwManager;
 
 public class PwManager_dao {
 	
-	/*
-
-	Database name: passwordManager
-	Table name: users
-				passwords
-
-	CREATE TABLE passwords
-	(id INT(3) not NULL, 
-	password VARCHAR(20), 
-	keyZ INT(3), 
-	username VARCHAR(26), 
-	user_email VARCHAR(30), 
-	app_name VARCHAR(10), 
-	url VARCHAR(30), 
-	PRIMARY KEY ( id ));
-	
-	create table users
-    (username varchar(20),
-    password varchar(20),
-    email varchar(50));
-	
-	*/
-	
 	public static Connection getConnection(){
 		Connection connection = null;
 		try {
@@ -49,8 +26,8 @@ public class PwManager_dao {
 	}
 
 //	method for validate the user
-	public static boolean validate(PwManager pwmanager){
-		boolean valid = false;
+	public static int validate(PwManager pwmanager){
+		int valid = 0;
 		try {
 			Connection connection = PwManager_dao.getConnection();
 			PreparedStatement ps = connection.prepareStatement("select * from users where username = ? and password = ?");
@@ -58,7 +35,9 @@ public class PwManager_dao {
 			ps.setString(2, pwmanager.getUser_password());
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				valid = true;
+				
+				valid = rs.getInt(1);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,55 +63,22 @@ public class PwManager_dao {
 		return id;
 	}
 	
-//	method to encrypt the password
-	public static String encPass(String msg, int key) {
-		String secret_message = "";
-		int a;
-		char[] ch = msg.toCharArray();					//		conversion to char array
-		
-		for (int i = 0; i < msg.length(); i++) {
-			if (ch[i] != 32) {
-				a = ch[i] - key;							//		shifting char value key times
-			} else {
-				a = ch[i];
-			}
-			secret_message += (char) a;					//		cast int to char and store into string
-		}
-		return secret_message;
-	}
-	
-//	method to decrypt the password
-	public static String decrypt(String secret_message, int key) {
-		String msg = "";
-		int a;
-		char[] ch = secret_message.toCharArray();					//		conversion to char array
-		
-		for (int i = 0; i < secret_message.length(); i++) {
-			if (ch[i] != 32) {
-				a = ch[i] + key;							//		shifting char value key times
-			} else {
-				a = ch[i];
-			}
-			msg += (char) a;
-		}
-		return msg;
-	}
-	
 //	method to insert password into an database
 	public static int insert(PwManager pwmanager){
 		int status = 0;
 		try {
 			int max_id = PwManager_dao.max_id();
-			String enc_pass = PwManager_dao.encPass(pwmanager.getPassword(), pwmanager.getKey());
+			String enc_pass = Cipher.encPass(pwmanager.getPassword(), pwmanager.getKey());
 			Connection con = PwManager_dao.getConnection();
-			PreparedStatement ps = con.prepareStatement("insert into passwords values(?,?,?,?,?,?,?)");
+			PreparedStatement ps = con.prepareStatement("insert into passwords values(?,?,?,?,?,?,?,?)");
 			ps.setInt(1, max_id);
-			ps.setString(2, enc_pass);
-			ps.setInt(3, pwmanager.getKey());
-			ps.setString(4, pwmanager.getUsername());
-			ps.setString(5, pwmanager.getUser_email());
-			ps.setString(6, pwmanager.getApp_name());
-			ps.setString(7, pwmanager.getUrl());
+			ps.setInt(2, pwmanager.getUserid());
+			ps.setString(3, enc_pass);
+			ps.setInt(4, pwmanager.getKey());
+			ps.setString(5, pwmanager.getUsername());
+			ps.setString(6, pwmanager.getUser_email());
+			ps.setString(7, pwmanager.getApp_name());
+			ps.setString(8, pwmanager.getUrl());
 			
 			status = ps.executeUpdate();
 			
@@ -143,24 +89,28 @@ public class PwManager_dao {
 	}
 
 //	method to retrieve password table from database
-	public static List<PwManager> retrievePwTable(){
+	public static List<PwManager> retrievePwTable(int userID){
 		List<PwManager> passwords = new ArrayList<PwManager>();
+		PwManager manager = new PwManager();
+		String pass = "";
+		
 		try {
 			Connection con = PwManager_dao.getConnection();
-			PreparedStatement ps = con.prepareStatement("select * from passwords");
+			PreparedStatement ps = con.prepareStatement("select * from passwords where userid = ?");
+			ps.setInt(1, userID);
+			
 			ResultSet rs = ps.executeQuery();
-			String pass = null;
 			while (rs.next()) {
 				
-				pass = PwManager_dao.decrypt(rs.getString(2), rs.getInt(3));
+				pass = Cipher.decrypt(rs.getString(3), rs.getInt(4));
 				
 				PwManager password = new PwManager();
-				password.setApp_name(rs.getString(6));
-				password.setUsername(rs.getString(4));
+				password.setApp_name(rs.getString(7));
+				password.setUsername(rs.getString(5));
 				password.setPassword(pass);
-				password.setUser_email(rs.getString(5));
-				password.setUrl(rs.getString(7));
-				password.setKey(rs.getInt(3));
+				password.setUser_email(rs.getString(6));
+				password.setUrl(rs.getString(8));
+				password.setKey(rs.getInt(4));
 				password.setId(rs.getInt(1));
 				
 				passwords.add(password);
@@ -194,7 +144,7 @@ public class PwManager_dao {
 		int status = 0;
 		try {
 			Connection con = PwManager_dao.getConnection();
-			PreparedStatement ps = con.prepareStatement("insert into users values(?,?,?)");
+			PreparedStatement ps = con.prepareStatement("insert into users (username, password, email) values(?,?,?)");
 			ps.setString(1, "default_username");
 			ps.setString(2, "default_password");
 			ps.setString(3, "default@mail.com");
