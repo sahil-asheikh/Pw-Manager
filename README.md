@@ -1,5 +1,5 @@
 ## Password-Manager
-* A Password Manager is a Java application that encrypts the user's password and stores it into the Oracle Database and allows users to decrypt, retrieve and manage their local passwords with their master password in an Oracle Database for applications, websites, and online services.
+* A Password Manager is a Java application that encrypts the user's password and stores it into the MySQL Database and allows users to decrypt, retrieve and manage their local passwords with their master password in an MySQL Database for applications, websites, and online services.
 
 ## Getting Started
 * You just have to clone the repo and import in any java/jdbc editor.
